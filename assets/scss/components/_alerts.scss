@@ -1,0 +1,37 @@
+.alert {
+	padding: 10px;
+	border: none;
+	border-radius: 0;
+	.close {
+		right: 10px;
+		top: 10px;
+		color: #fff;
+		position: absolute;
+	}
+	&.alert-info {
+		background: #009FB0;
+	}
+	&.alert-warning, &.alert-danger {
+		background: #E85300;
+	}
+	&.alert-success {
+		background: #CAC811;
+	}
+	.info {
+		.icon {
+			height: 45px;
+			width: 45px;
+			float: left;
+			fill: #fff;
+			margin-right: 10px;
+			position: absolute;
+		}
+		p{
+			font-size: 17px;
+			display: inline-block;
+			margin: 10px 0;
+			color: #fff;
+			padding-left: 45px;
+		}
+	}
+}

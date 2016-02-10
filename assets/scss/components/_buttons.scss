@@ -1,0 +1,189 @@
+.btn-primary {
+  border-color: $brand-primary;
+  font-family: $font_0, $font_1, $font_2, $font_3, $font_4;
+  color: $white;
+  background-color: $brand-primary;
+  &:hover {
+    @extend %extend_2;
+  }
+  &:focus {
+    @extend %extend_2;
+  }
+  &:active {
+    @extend %extend_2;
+    background-image: none;
+  }
+  &.active {
+    @extend %extend_2;
+    background-image: none;
+  }
+  &.disabled {
+    border-color: $brand-primary;
+    background-color: $brand-primary;
+    &:hover {
+      border-color: $brand-primary;
+      background-color: $brand-primary;
+    }
+    &:focus {
+      border-color: $brand-primary;
+      background-color: $brand-primary;
+    }
+    &:active {
+      border-color: $brand-primary;
+      background-color: $brand-primary;
+    }
+    &.active {
+      border-color: $brand-primary;
+      background-color: $brand-primary;
+    }
+  }
+  .badge {
+    color: $brand-primary;
+    background-color: $white;
+  }
+}
+.btn-primary[disabled] {
+  border-color: $brand-primary;
+  background-color: $brand-primary;
+  &:hover {
+    border-color: $brand-primary;
+    background-color: $brand-primary;
+  }
+  &:focus {
+    border-color: $brand-primary;
+    background-color: $brand-primary;
+  }
+  &:active {
+    border-color: $brand-primary;
+    background-color: $brand-primary;
+  }
+  &.active {
+    border-color: $brand-primary;
+    background-color: $brand-primary;
+  }
+}
+fieldset[disabled] {
+  .btn-primary {
+    border-color: $brand-primary;
+    background-color: $brand-primary;
+    &:hover {
+      border-color: $brand-primary;
+      background-color: $brand-primary;
+    }
+    &:focus {
+      border-color: $brand-primary;
+      background-color: $brand-primary;
+    }
+    &:active {
+      border-color: $brand-primary;
+      background-color: $brand-primary;
+    }
+    &.active {
+      border-color: $brand-primary;
+      background-color: $brand-primary;
+    }
+  }
+  .btn-xl {
+    border-color: $brand-primary;
+    background-color: $brand-primary;
+    &:hover {
+      border-color: $brand-primary;
+      background-color: $brand-primary;
+    }
+    &:focus {
+      border-color: $brand-primary;
+      background-color: $brand-primary;
+    }
+    &:active {
+      border-color: $brand-primary;
+      background-color: $brand-primary;
+    }
+    &.active {
+      border-color: $brand-primary;
+      background-color: $brand-primary;
+    }
+  }
+}
+.btn-xl {
+  padding: 20px 40px;
+  border-color: $brand-primary;
+  //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+  border-radius: 3px;
+  text-transform: uppercase;
+  font-family: $font_0, $font_1, $font_2, $font_3, $font_4;
+  font-size: 18px;
+  font-weight: 700;
+  color: $white;
+  background-color: $brand-primary;
+  &:hover {
+    border-color: darken($brand-primary, 20%);
+    background-color: darken($brand-primary, 20%);
+  }
+  &:focus {
+  }
+  &:active {
+    background-image: none;
+  }
+  &.active {
+    background-image: none;
+  }
+  &.disabled {
+    border-color: $brand-primary;
+    background-color: $brand-primary;
+    &:hover {
+      border-color: darken($brand-primary, 20%);
+      background-color: darken($brand-primary, 20%);
+    }
+    &:focus {
+      border-color: darken($brand-primary, 20%);
+      background-color: darken($brand-primary, 20%);
+    }
+    &:active {
+      border-color: darken($brand-primary, 20%);
+      background-color: darken($brand-primary, 20%);
+    }
+    &.active {
+      border-color: darken($brand-primary, 20%);
+      background-color: darken($brand-primary, 20%);
+    }
+  }
+  .badge {
+    color: $brand-primary;
+    background-color: $white;
+  }
+}
+.btn-xl[disabled] {
+  border-color: $brand-primary;
+  background-color: $brand-primary;
+  &:hover {
+    border-color: $brand-primary;
+    background-color: $brand-primary;
+  }
+  &:focus {
+    border-color: $brand-primary;
+    background-color: $brand-primary;
+  }
+  &:active {
+    border-color: $brand-primary;
+    background-color: $brand-primary;
+  }
+  &.active {
+    border-color: $brand-primary;
+    background-color: $brand-primary;
+  }
+}
+
+.btn {
+  &:focus {
+    outline: 0;
+  }
+  &:active {
+    outline: 0;
+    &:focus {
+      outline: 0;
+    }
+  }
+  &.active {
+    outline: 0;
+  }
+}
