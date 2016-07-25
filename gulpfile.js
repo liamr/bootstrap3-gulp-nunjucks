@@ -1,39 +1,29 @@
-//Gulp resources: http://yeoman.io/blog/performance-optimization.html
-
 var gulp = require('gulp'),
     sass = require('gulp-sass'),
+    browserSync = require('browser-sync'),
     autoprefixer = require('gulp-autoprefixer'),
-    minifycss = require('gulp-minify-css'),
-    jshint = require('gulp-jshint'),
     uglify = require('gulp-uglify'),
-    imagemin = require('gulp-imagemin'),
+    jshint = require('gulp-jshint'),
+    header  = require('gulp-header'),
     rename = require('gulp-rename'),
-    clean = require('gulp-clean'),
-    concat = require('gulp-concat'),
-    //notify = require('gulp-notify'),
-    cache = require('gulp-cache'),
-    livereload = require('gulp-livereload'),
-    lr = require('tiny-lr'),
     sourcemaps = require('gulp-sourcemaps'),
+    cssnano = require('gulp-cssnano'),
     nunjucksRender = require('gulp-nunjucks-render'),
-    evilIcons = require("gulp-evil-icons"),
-    server = lr();
+    concat = require('gulp-concat'),
+    package = require('./package.json');
 
-gulp.task('styles', function() {
-  return gulp.src('assets/scss/app.scss')
-    //.pipe(sass({ style: 'compressed'}))//Note: sourcemap requires sass 3
-    .pipe(sourcemaps.init())
-    .pipe(sass({ outputStyle: 'compressed'}))//Note: sourcemap requires sass 3
-    .pipe(sourcemaps.write())
-    .on('error', swallowError)
-    .pipe(autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
-    .pipe(gulp.dest('css'))
-    .pipe(rename({suffix: '.min'}))
-    //.pipe(minifycss())
-    .pipe(gulp.dest('assets/css'))
-    .pipe(livereload(server));
-    //.pipe(notify({ message: 'Styles task complete' }));
-});
+
+var banner = [
+  '/*!\n' +
+  ' * <%= package.name %>\n' +
+  ' * <%= package.title %>\n' +
+  ' * <%= package.url %>\n' +
+  ' * @author <%= package.author %>\n' +
+  ' * @version <%= package.version %>\n' +
+  ' * Copyright ' + new Date().getFullYear() + '. <%= package.license %> licensed.\n' +
+  ' */',
+  '\n'
+].join('');
 
 function swallowError (error) {
 
@@ -43,92 +33,60 @@ function swallowError (error) {
     this.emit('end');
 }
 
-// Scripts
-gulp.task('scripts', function() {
-  return gulp.src(['assets/js/vendor/jquery.js', 
-    'assets/js/vendor/**/!(jquery)*.js', 
-    'assets/js/vendor/bootstrap.js', 
-    'assets/js/vendor/**/!(bootstrap)*.js', 
+gulp.task('css', function () {
+    return gulp.src('assets/scss/app.scss')
+    //.pipe(sourcemaps.init())
+    .pipe(sass().on('error', sass.logError))
+    //.pipe(sourcemaps.write())
+    .pipe(autoprefixer('last 4 version'))
+    .pipe(gulp.dest('assets/css'))
+    .pipe(cssnano())
+    .pipe(rename({ suffix: '.min' }))
+    .pipe(header(banner, { package : package }))
+    .pipe(gulp.dest('assets/css'))
+    .pipe(browserSync.reload({stream:true}));
+});
+
+gulp.task('js',function(){
+  return gulp.src(['assets/js/vendor/jquery.js',
+    'assets/js/vendor/**/!(jquery)*.js',
+    'assets/js/vendor/bootstrap.js',
+    'assets/js/vendor/**/!(bootstrap)*.js',
     'assets/js/app.js'])
     //.pipe(jshint('.jshintrc'))
-    .pipe(jshint.reporter('default'))
+    //.pipe(jshint.reporter('default'))
     .pipe(concat('app.min.js'))
-    //.pipe(concat('app.js'))
     //.pipe(gulp.dest('assets/js'))
+    .pipe(uglify())
+    .pipe(header(banner, { package : package }))
     //.pipe(rename({ suffix: '.min' }))
-    //.pipe(uglify({outSourceMap: true}))
-    .pipe(livereload(server))
-    .pipe(gulp.dest('assets/js'));
-    //.pipe(notify({ message: 'Scripts task complete' }));
+    .pipe(gulp.dest('assets/js'))
+    .pipe(browserSync.reload({stream:true, once: true}));
 });
 
-//Nunjucks
 gulp.task('nunjucks', function() {
   nunjucksRender.nunjucks.configure(['assets/html/templates']);
-
-  // Gets .html and .nunjucks files in pages
   return gulp.src('assets/html/pages/**/*.+(html|nunjucks)')
-  // Renders template with nunjucks
   .pipe(nunjucksRender())
-  .pipe(evilIcons())
   .on('error', swallowError)
-  // output files in app folder
   .pipe(gulp.dest('./'))
-  .pipe(livereload(server));
+  .pipe(browserSync.reload({stream:true, once: true}));
 });
 
-// Images
-//gulp.task('images', function() {
-//  return gulp.src('src/images/**/*')
-//    .pipe(cache(imagemin({ optimizationLevel: 3, progressive: true, interlaced: true })))
-//    .pipe(livereload(server))
-//    .pipe(gulp.dest('dist/images'))
-//    .pipe(notify({ message: 'Images task complete' }));
-//});
-
-//HTML - Just watch and reload
-gulp.task('html', function() {
-    return gulp.src('**/*.html')
-        .pipe(gulp.dest(''))
-        .pipe(livereload(server));
-        //.pipe(notify({ message: 'HTML task complete' }));
+gulp.task('browser-sync', function() {
+    browserSync.init(null, {
+        server: {
+            baseDir: "./"
+        }
+    });
+});
+gulp.task('bs-reload', function () {
+    browserSync.reload();
 });
 
-// Clean
-gulp.task('clean', function() {
-  //return gulp.src(['dist/styles', 'dist/scripts', 'dist/images'], {read: false})
-  //  .pipe(clean());
-});
-
-gulp.task('default', ['clean'], function() {
-    gulp.start('styles');
-});
-
-gulp.task('watch', function() {
-
-    //gulp.watch('assets/scss/app.scss', ['styles']);
-
-  // Listen on port 35729
-  server.listen(35729, function (err) {
-    if (err) {
-      return console.log(err)
-    };
-
-    // Watch .scss files
-    gulp.watch('assets/scss/**/*.scss', ['styles']);
-
-    // Watch .js files
-    gulp.watch(['assets/js/**/*.js', "!assets/js/app.min.js"], ['scripts']);
-
-    //Watch HTML
+gulp.task('default', ['css', 'js', 'browser-sync'], function () {
+    gulp.watch("assets/scss/*/*.scss", ['css']);
+    gulp.watch(["assets/js/*.js", "!assets/js/app.min.js"], ['js']);
+    //gulp.watch("assets/*.html", ['bs-reload']);
     gulp.watch('assets/html/**/*+(html|nunjucks)', ['nunjucks']);
-
-    // Watch image files
-    //gulp.watch('src/images/**/*', ['images']);
-
-  });
-
 });
-
-
-

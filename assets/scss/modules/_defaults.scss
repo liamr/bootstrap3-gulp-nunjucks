@@ -1,0 +1,20 @@
+* {
+  box-sizing: border-box;
+  font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+html {
+}
+body {
+  font-family: 'Replica', 'Helvetica Neue', Helvetica, Arial;
+  color: #333;
+  transition: all .4s .3s ease-in;
+}
+body,html{
+	min-height: 100vh;
+	overflow-y: hidden;
+}
+
+strong {
+  font-weight: bold;
+}
